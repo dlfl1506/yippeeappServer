@@ -5,4 +5,31 @@
 <mapper namespace="com.cos.yippeeappserver.mapper.Mapper">
 
 
+    <select id="selectUserInfo" parameterType="String" resultType="map">
+        select *
+        from user
+        WHERE phone = #{phone}
+    </select>
+
+    <insert id="addStamp" parameterType="map">
+        insert into user(phone, stamp, insertdt, updatedt)
+        values (#{phone}, #{stamp}, sysdate(), sysdate())
+    </insert>
+
+    <update id="addStampAnduseCoupon" parameterType="map">
+        update user
+        set stamp = stamp + #{stamp},
+        coupon = coupon - #{coupon},
+         updatedt = sysdate()
+        where phone = #{phone}
+    </update>
+
+       <update id="updateStamp" parameterType="String">
+        update user
+        set stamp = stamp - 10,
+        coupon = coupon + 1,
+         updatedt = sysdate()
+        where phone = #{phone}
+    </update>
+
 </mapper>

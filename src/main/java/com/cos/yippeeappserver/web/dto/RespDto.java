@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class RespDto {
-    private int coupon;
+    private int stamp;
+    private int afterStamp;
+    private int afterCoupon;
 
 }
