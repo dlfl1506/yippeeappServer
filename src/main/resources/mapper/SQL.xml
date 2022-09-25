@@ -6,30 +6,63 @@
 
 
     <select id="selectUserInfo" parameterType="String" resultType="map">
-        select *
-        from user
+        select u.phone
+                  , u.name
+                  , (select FLOOR ((sum(sh.qty))/10) from stamp_hist sh where sh.phone = u.phone ) as stamp
+                  , (select (sum(sh.qty)) % 10 from stamp_hist sh where sh.phone = u.phone ) as stamp2
+                  , NVL((select (sum(ch.qty)) % 10 from coupon_hist ch where ch.phone = u.phone ),0) as coupon
+                  , u.remark
+        from user u
         WHERE phone = #{phone}
     </select>
 
     <insert id="addStamp" parameterType="map">
-        insert into user(phone, stamp, insertdt, updatedt)
-        values (#{phone}, #{stamp}, sysdate(), sysdate())
+        insert into user(phone, insertdt, updatedt)
+        values (#{phone}, sysdate(), sysdate())
     </insert>
 
-    <update id="addStampAnduseCoupon" parameterType="map">
+    <select id="selectCouponHist" parameterType="map" resultType="map">
+      select id  from coupon_hist where phone = #{phone} order by insertdt limit #{count}
+    </select>
+
+    <delete id="useCoupon" parameterType="String">
+        delete from coupon_hist  where id = #{id}
+    </delete>
+
+    <update id="updateStamp" parameterType="String">
         update user
-        set stamp = stamp + #{stamp},
-        coupon = coupon - #{coupon},
-         updatedt = sysdate()
+        set stamp    = stamp - 10,
+            coupon   = coupon + 1,
+            updatedt = sysdate()
         where phone = #{phone}
     </update>
 
-       <update id="updateStamp" parameterType="String">
-        update user
-        set stamp = stamp - 10,
-        coupon = coupon + 1,
-         updatedt = sysdate()
+
+    <insert id="insertStampHist" parameterType="map">
+        insert into stamp_hist(phone, qty, insertdt, updatedt)
+        values (#{phone}, #{qty}, sysdate(), sysdate())
+    </insert>
+
+       <delete id="deleteStamp" parameterType="String">
+        delete  from stamp_hist
         where phone = #{phone}
-    </update>
+    </delete>
+
+    <insert id="insertCouponHist" parameterType="map">
+        insert into coupon_hist(phone, qty, insertdt, updatedt)
+        values (#{phone}, #{qty}, sysdate(), sysdate())
+    </insert>
+
+    <delete id="deleteStampHist" >
+        delete
+        from stamp_hist
+        where insertdt &lt;= date_add(now(), interval -1 month)
+    </delete>
+
+    <delete id="deleteCouponHist">
+        delete
+        from coupon_hist
+        where insertdt &lt;= date_add(now(), interval -1 month)
+    </delete>
 
 </mapper>

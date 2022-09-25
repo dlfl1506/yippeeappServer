@@ -12,6 +12,7 @@
     <artifactId>yippeeappServer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>yippeeappServer</name>
+    <packaging>war</packaging>
     <description>yippeeappServer</description>
     <properties>
         <java.version>1.8</java.version>
@@ -39,13 +40,13 @@
             <scope>test</scope>
         </dependency>
 
-         <dependency>
+        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.4</version>
         </dependency>
 
-         <dependency>
+        <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <scope>runtime</scope>
