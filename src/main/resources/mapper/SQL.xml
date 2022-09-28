@@ -50,7 +50,7 @@
 
     <insert id="insertCouponHist" parameterType="map">
         insert into coupon_hist(phone, qty, insertdt, updatedt)
-        values (#{phone}, #{qty}, sysdate(), sysdate())
+        values (#{phone}, 1, sysdate(), sysdate())
     </insert>
 
     <delete id="deleteStampHist" >

@@ -61,14 +61,13 @@ public class Controller {
                     remark = info.get("remark").toString();
                 }
             }
-            System.out.println("=====================================");
+            System.out.println("=============================================================");
             System.out.println("폰 번호 :" + phone);
             System.out.println("고객 명 :" + name);
             System.out.println("보유 스탬프:" + stamp);
             System.out.println("보유 쿠폰:" + coupon);
             System.out.println("고객 특이사항 :" + remark);
             System.out.print("적립 스탬프 갯수 :");
-            System.out.println("=====================================");
             Scanner scanner = new Scanner(System.in);
             int addStamp = scanner.nextInt();
 
@@ -101,7 +100,9 @@ public class Controller {
                         param2.put("qty", info2.get("stamp2").toString());
                         mapper.insertStampHist(param2); // 나머지만큼 스탬프 저장
                         param2.put("qty", info2.get("stamp").toString());
-                        mapper.insertCouponHist(param2);  // 몫 만큼 쿠폰 저장
+                        for(int i=0; i<Integer.parseInt(info2.get("stamp").toString()); i++){ // 몫 만큼 쿠폰 1씩 저장
+                             mapper.insertCouponHist(param2);
+                        }
                     }
                 }
 
@@ -116,6 +117,7 @@ public class Controller {
             Map<String, Object> afterInfo = mapper.selectUserInfo(phone);
 
             System.out.println(addStamp + "개의 스탬프가 적립되고 " + useCoupon + "개의 쿠폰이 사용되었습니다.");
+            System.out.println("=============================================================");
             RespDto respDto = new RespDto();
             respDto.setStamp(addStamp);
             respDto.setAfterStamp(Integer.parseInt(afterInfo.get("stamp2").toString()));
