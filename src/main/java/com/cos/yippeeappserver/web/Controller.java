@@ -22,7 +22,7 @@ public class Controller {
     private int coupon;
 
     @GetMapping("/search")
-    public CMRespDto<?> test(String phone){
+    public CMRespDto<?> test(String phone) {
 
         try {
             mapper.deleteStampHist();
@@ -83,6 +83,21 @@ public class Controller {
                     param.put("phone", phone);
                     param.put("qty", addStamp);
                     mapper.insertStampHist(param);
+
+                    Map<String, Object> info2 = mapper.selectUserInfo(phone); // 스탬프 적립후 다시조회
+                    if (Integer.parseInt(info2.get("stamp").toString()) >= 1) {  // 스탬프 가 10 개보다 크면
+                        int result2 = mapper.deleteStamp(phone); // 스탬프 이력 전부삭제
+                        if (result2 >= 1) {
+                            Map<String, Object> param2 = new HashMap<>();
+                            param2.put("phone", phone);
+                            param2.put("qty", info2.get("stamp2").toString());
+                            mapper.insertStampHist(param2); // 나머지만큼 스탬프 저장
+                            param2.put("qty", info2.get("stamp").toString());
+                            for (int i = 0; i < Integer.parseInt(info2.get("stamp").toString()); i++) { // 몫 만큼 쿠폰 1씩 저장
+                                mapper.insertCouponHist(param2);
+                            }
+                        }
+                    }
                 }
             } else {
                 Map<String, Object> param = new HashMap<>();
@@ -100,8 +115,8 @@ public class Controller {
                         param2.put("qty", info2.get("stamp2").toString());
                         mapper.insertStampHist(param2); // 나머지만큼 스탬프 저장
                         param2.put("qty", info2.get("stamp").toString());
-                        for(int i=0; i<Integer.parseInt(info2.get("stamp").toString()); i++){ // 몫 만큼 쿠폰 1씩 저장
-                             mapper.insertCouponHist(param2);
+                        for (int i = 0; i < Integer.parseInt(info2.get("stamp").toString()); i++) { // 몫 만큼 쿠폰 1씩 저장
+                            mapper.insertCouponHist(param2);
                         }
                     }
                 }
