@@ -56,13 +56,13 @@
     <delete id="deleteStampHist" >
         delete
         from stamp_hist
-        where insertdt &lt;= date_add(now(), interval -1 month)
+        where insertdt &lt;= date_add(now(), interval -3 month)
     </delete>
 
     <delete id="deleteCouponHist">
         delete
         from coupon_hist
-        where insertdt &lt;= date_add(now(), interval -1 month)
+        where insertdt &lt;= date_add(now(), interval -3 month)
     </delete>
 
 </mapper>
